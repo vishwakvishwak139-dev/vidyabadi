@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="విద్యా నిధి — తెలుగు డిజిటల్ లెర్నింగ్ పోర్టల్, వ్యాకరణం, భాషా అభ్యసనం & సమగ్ర విద్యా వనరులు">
+  <title>విద్యా నిధి | డిజిటల్ లెర్నింగ్ పోర్టల్ & అడ్మిన్ నిర్వహణ</title>
+
+  <!-- ================================================================= -->
+  <!-- Google AdSense Verification Meta Tag, Auto-Ads Script & ads.txt   -->
+  <!-- ================================================================= -->
+  <meta name="google-adsense-account" content="ca-pub-1307250597168110">
+  <meta name="ads-txt" content="google.com, pub-1307250597168110, DIRECT, f08c47fec0942fa0">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1307250597168110"
+     crossorigin="anonymous"></script>
+  <!-- google.com, pub-1307250597168110, DIRECT, f08c47fec0942fa0 -->
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Google Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+
+  <style>
+    :root {
+      --red: #dc2626;
+      --red-dark: #b91c1c;
+      --green: #16a34a;
+      --green-dark: #15803d;
+      --yellow: #facc15;
+      --yellow-dark: #ca8a04;
+      --black: #0f172a;
+      --white: #ffffff;
+      --bg: #f8fafc;
+      --border: #cbd5e1;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', 'Mandali', sans-serif;
+      background-color: var(--bg);
+      color: var(--black);
+      line-height: 1.6;
+    }
+
+    /* Hero Header */
+    .hero-header {
+      background: linear-gradient(135deg, var(--red-dark) 0%, var(--black) 50%, var(--green-dark) 100%);
+      color: var(--white);
+      padding: 34px 20px;
+      text-align: center;
+      border-bottom: 4px solid var(--yellow);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+    .hero-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--yellow);
+      text-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+      margin-bottom: 6px;
+    }
+    .hero-header p { font-size: 1.05rem; color: #f1f5f9; }
+
+    /* Navbar */
+    .navbar {
+      background: var(--white);
+      border-bottom: 3px solid var(--red);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .nav-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      padding: 0 10px;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 14px;
+      color: var(--black);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .nav-link:hover, .nav-link.active {
+      background: var(--yellow);
+      color: var(--black);
+    }
+    .arrow { font-size: 0.65rem; transition: transform 0.2s; }
+    .nav-item:hover .arrow { transform: rotate(180deg); }
+
+    /* Dropdown Menu */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--white);
+      min-width: 230px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border: 2px solid var(--black);
+      border-top: 3px solid var(--green);
+      list-style: none;
+      padding: 6px 0;
+      display: none;
+      z-index: 1001;
+    }
+    .nav-item:hover .dropdown { display: block; }
+    .dropdown-link {
+      display: block;
+      padding: 10px 16px;
+      color: var(--black);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .dropdown-link:hover {
+      background: var(--green);
+      color: var(--white);
+      padding-left: 20px;
+    }
+
+    .main-wrap { max-width: 1250px; margin: 25px auto; padding: 0 16px 40px; }
+
+    /* About Section */
+    .about-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 2px solid var(--green);
+      border-left: 8px solid var(--green);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      margin-bottom: 25px;
+    }
+    .about-card h2 {
+      color: var(--green);
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .author-info-box {
+      background: #f0fdf4;
+      border: 1px dashed var(--green);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+    .author-info-box p { font-size: 1rem; color: #166534; font-weight: 700; margin-bottom: 4px; }
+    .about-desc { font-size: 0.95rem; color: #334155; line-height: 1.7; }
+
+    /* Audio Practice Section */
+    .audio-section {
+      display: none;
+      background: var(--white);
+      border-radius: 16px;
+      border: 2px solid var(--red);
+      border-left: 8px solid var(--red);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+      margin-bottom: 25px;
+    }
+    .audio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .audio-section h3 {
+      color: var(--red);
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+    .audio-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin: 15px 0; }
+    .audio-tab-btn {
+      padding: 8px 16px;
+      background: var(--white);
+      border: 2px solid var(--black);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .audio-tab-btn.active, .audio-tab-btn:hover {
+      background: var(--red);
+      color: var(--white);
+      border-color: var(--red);
+    }
+    .audio-panel { display: none; }
+    .audio-panel.active { display: block; }
+    .sound-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 10px; }
+    .sound-grid.words { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+    .sound-btn {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s;
+    }
+    .sound-btn:hover {
+      border-color: var(--green);
+      background: #f0fdf4;
+      transform: translateY(-2px);
+    }
+    .sound-sub { display: block; font-size: 0.7rem; color: #64748b; font-weight: 600; margin-top: 2px; }
+
+    /* Dynamic Folder Section */
+    .selected-folder-section {
+      display: none;
+      background: var(--white);
+      border: 2px solid var(--yellow-dark);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+    }
+    .folder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+    .folder-header h3 {
+      font-size: 1.35rem;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .folder-badge {
+      background: var(--yellow);
+      color: var(--black);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+    .close-folder-btn {
+      background: #fee2e2;
+      color: var(--red);
+      border: 1px solid var(--red);
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
+    .material-card {
+      background: var(--white);
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      border-top: 5px solid var(--green);
+      padding: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .tags-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .tag-cat { background: #e2e8f0; color: var(--black); }
+    .tag-pdf { background: #fee2e2; color: var(--red); }
+    .tag-ppt { background: #fef3c7; color: var(--yellow-dark); }
+    .tag-excel { background: #dcfce7; color: var(--green); }
+    .tag-yt { background: #ffe4e6; color: var(--red); }
+
+    .card-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .btn-action {
+      flex: 1;
+      padding: 9px 12px;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+    }
+    .btn-view { background: #f1f5f9; color: var(--black); border: 1px solid #cbd5e1; }
+    .btn-download { background: var(--green); color: var(--white); }
+    .btn-yt { background: #e11d48; color: var(--white); }
+
+    /* Card Direct Delete Button */
+    .btn-card-del {
+      background: #fee2e2;
+      color: var(--red);
+      border: 1.5px solid var(--red);
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-card-del:hover {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    /* Secret Admin Modal */
+    .secret-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 5000;
+      place-items: center;
+      padding: 16px;
+    }
+    .secret-modal.active { display: grid; }
+    .modal-card {
+      background: var(--white);
+      width: min(780px, 95vw);
+      border-radius: 16px;
+      padding: 26px;
+      border: 3px solid var(--black);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .close-btn {
+      position: absolute; right: 16px; top: 16px;
+      background: #f1f5f9; border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-weight: 800; cursor: pointer;
+    }
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font: inherit; outline: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--red); }
+    .submit-btn {
+      width: 100%; background: var(--red); color: var(--white);
+      border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.95rem;
+    }
+    .submit-btn:hover { background: var(--red-dark); }
+    .msg { margin-top: 10px; font-weight: 700; font-size: 0.9rem; }
+    .msg.ok { color: var(--green); }
+    .msg.err { color: var(--red); }
+
+    /* Upload Progress Box */
+    .progress-box {
+      display: none;
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .progress-bar-inner {
+      height: 8px;
+      background: var(--green);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.2s;
+    }
+
+    /* Admin Management Box */
+    .admin-manage-box {
+      margin-top: 25px;
+      border: 2px solid var(--red);
+      background: #fff5f5;
+      padding: 18px;
+      border-radius: 12px;
+    }
+    .admin-file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid #fed7d7;
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .del-btn {
+      background: #e53e3e;
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .del-btn:hover {
+      background: #c53030;
+    }
+
+    /* AdSense Rich Educational Articles Section */
+    .edu-articles-section {
+      margin-top: 30px;
+    }
+    .section-main-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--red);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 22px;
+      margin-bottom: 30px;
+    }
+    .article-box {
+      background: var(--white);
+      border-radius: 14px;
+      border: 2px solid #e2e8f0;
+      border-top: 6px solid var(--red);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    .article-box.green-top { border-top-color: var(--green); }
+    .article-box.yellow-top { border-top-color: var(--yellow-dark); }
+    .article-box h3 {
+      font-size: 1.28rem;
+      color: var(--red-dark);
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+    .article-box.green-top h3 { color: var(--green-dark); }
+    .article-box.yellow-top h3 { color: #b45309; }
+    .article-box p {
+      font-size: 0.94rem;
+      color: #334155;
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+    .article-box ul {
+      padding-left: 20px;
+      margin-bottom: 10px;
+    }
+    .article-box li {
+      font-size: 0.92rem;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+    .grammar-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.88rem;
+    }
+    .grammar-table th, .grammar-table td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .grammar-table th {
+      background: #f1f5f9;
+      font-weight: 800;
+      color: var(--black);
+    }
+
+    /* Policy & Legal Section (Mandatory for Google AdSense) */
+    .policy-section {
+      display: none;
+      background: var(--white);
+      border-radius: 16px;
+      border: 2px solid var(--black);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-top: 25px;
+      margin-bottom: 25px;
+    }
+    .policy-section h3 {
+      color: var(--red-dark);
+      font-size: 1.4rem;
+      margin-bottom: 14px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+    .policy-section h4 {
+      color: var(--green-dark);
+      font-size: 1.1rem;
+      margin: 14px 0 6px;
+    }
+    .policy-section p, .policy-section li {
+      font-size: 0.93rem;
+      color: #334155;
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+    .footer-links a {
+      color: var(--yellow);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+      opacity: 0.9;
+    }
+
+    footer {
+      background: var(--black);
+      color: var(--white);
+      text-align: center;
+      padding: 24px 20px;
+      border-top: 4px solid var(--yellow);
+      margin-top: 50px;
+      font-size: 0.9rem;
+    }
+    .secret-trigger { cursor: pointer; user-select: none; }
+    .ads-txt-footer {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-top: 8px;
+      font-family: monospace;
+    }
+
+    @media (max-width: 900px) {
+      .nav-menu { justify-content: flex-start; overflow-x: auto; white-space: nowrap; padding-bottom: 6px; }
+      .dropdown { position: static; box-shadow: none; border: 1px solid #cbd5e1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="hero-header">
+    <h1>విద్యా నిధి</h1>
+    <p>తెలుగు విద్యా డిజిటల్ వనరులు, పాఠ్యాంశాలు, మోడల్ పేపర్లు & భాషా పరిజ్ఞానం</p>
+  </header>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <ul class="nav-menu">
+        <li class="nav-item"><a onclick="showHomeView()" class="nav-link">👤 నా గురించి</a></li>
+
+        <!-- భాషా అభ్యసనం -->
+        <li class="nav-item">
+          <a class="nav-link">🔊 భాషా అభ్యసనం <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openBhashaTab('varnamala')">🔤 వర్ణమాల</a></li>
+            <li><a class="dropdown-link" onclick="openBhashaTab('guninthalu')">📝 గుణింతాలు</a></li>
+            <li><a class="dropdown-link" onclick="openBhashaTab('vottulu')">✍️ ఒత్తులు</a></li>
+            <li><a class="dropdown-link" onclick="openBhashaTab('sarala')">📖 సరళ పదాలు</a></li>
+            <li><a class="dropdown-link" onclick="openBhashaTab('dvitva')">🔡 ద్విత్వ పదాలు</a></li>
+            <li><a class="dropdown-link" onclick="openBhashaTab('samyukta')">🔠 సంయుక్త పదాలు</a></li>
+            <li><a class="dropdown-link" onclick="openBhashaTab('samslesha')">📚 సంశ్లేష పదాలు</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link">📚 డిజిటల్ పుస్తకాలు <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openSectionFolder('డిజిటల్ పుస్తకాలు', '6వ తరగతి')">📖 6వ తరగతి మెటీరియల్</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('డిజిటల్ పుస్తకాలు', '7వ తరగతి')">📖 7వ తరగతి మెటీరియల్</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('డిజిటల్ పుస్తకాలు', '8వ తరగతి')">📖 8వ తరగతి మెటీరియల్</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('డిజిటల్ పుస్తకాలు', '9వ తరగతి')">📖 9వ తరగతి మెటీరియల్</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('డిజిటల్ పుస్తకాలు', '10వ తరగతి')">📖 10వ తరగతి మెటీరియల్</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link">📕 పాఠ్యపుస్తకాలు <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openSectionFolder('పాఠ్యపుస్తకాలు', '6వ తరగతి వాచకం')">6వ తరగతి తెలుగు వాచకం</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('పాఠ్యపుస్తకాలు', '7వ తరగతి వాచకం')">7వ తరగతి తెలుగు వాచకం</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('పాఠ్యపుస్తకాలు', '8వ తరగతి వాచకం')">8వ తరగతి తెలుగు వాచకం</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('పాఠ్యపుస్తకాలు', '9వ తరగతి వాచకం')">9వ తరగతి తెలుగు వాచకం</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('పాఠ్యపుస్తకాలు', '10వ తరగతి వాచకం')">10వ తరగతి తెలుగు వాచకం</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link">📝 మాదిరి ప్రశ్న పత్రాలు <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openSectionFolder('మాదిరి ప్రశ్న పత్రాలు', 'FA-1')">FA-1 ప్రశ్నాపత్రాలు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('మాదిరి ప్రశ్న పత్రాలు', 'FA-2')">FA-2 ప్రశ్నాపత్రాలు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('మాదిరి ప్రశ్న పత్రాలు', 'FA-3')">FA-3 ప్రశ్నాపత్రాలు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('మాదిరి ప్రశ్న పత్రాలు', 'FA-4')">FA-4 ప్రశ్నాపత్రాలు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('మాదిరి ప్రశ్న పత్రాలు', 'SA-1')">SA-1 పరీక్షల పేపర్లు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('మాదిరి ప్రశ్న పత్రాలు', 'SA-2')">SA-2 వార్షిక పేపర్లు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('మాదిరి ప్రశ్న పత్రాలు', '10వ తరగతి బోర్డు మోడల్ పేపర్లు')">10వ తరగతి బోర్డు పేపర్లు</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link">📖 వ్యాకరణాంశాలు <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openSectionFolder('వ్యాకరణాంశాలు', 'సంధులు')">సంధులు (తెలుగు & సంస్కృత)</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('వ్యాకరణాంశాలు', 'సమాసాలు')">సమాసాలు & విగ్రహవాక్యాలు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('వ్యాకరణాంశాలు', 'ఛందస్సు')">ఛందస్సు (వృత్తాలు, జాతులు)</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('వ్యాకరణాంశాలు', 'అలంకారాలు')">అలంకారాలు (శబ్ద & అర్థ)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item"><a class="nav-link" onclick="openSectionFolder('క్విజ్', 'ఆన్‌లైన్ క్విజ్')">🎯 క్విజ్</a></li>
+
+        <li class="nav-item">
+          <a class="nav-link">✍️ సాహిత్య అంశాలు <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openSectionFolder('సాహిత్య అంశాలు', 'తెలంగాణ కవులు')">తెలంగాణ కవులు & రచయితలు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('సాహిత్య అంశాలు', 'గేయాలు & కవితలు')">కవితలు & గేయ సంపుటులు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('సాహిత్య అంశాలు', 'సాహిత్య ప్రక్రియలు')">సాహిత్య ప్రక్రియలు & విశేషాలు</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link">💡 ప్రాజెక్టులు <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openSectionFolder('ప్రాజెక్టులు', '6-8వ తరగతి ప్రాజెక్టులు')">6 - 8వ తరగతి ప్రాజెక్ట్ పనులు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('ప్రాజెక్టులు', '9-10వ తరగతి ప్రాజెక్ట్ పనులు')">9 - 10వ తరగతి ప్రాజెక్ట్ పనులు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('ప్రాజెక్టులు', 'సృజనాత్మక నమూనాలు')">సృజనాత్మక నమూనాలు</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link">🔎 పుస్తక సమీక్షలు <span class="arrow">▼</span></a>
+          <ul class="dropdown">
+            <li><a class="dropdown-link" onclick="openSectionFolder('పుస్తక సమీక్షలు', 'విద్యా గ్రంథాలు')">పాఠశాల విద్యా గ్రంథాల సమీక్ష</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('పుస్తక సమీక్షలు', 'సాహిత్య సంపుటులు')">సాహిత్య & కథా సంపుటులు</a></li>
+            <li><a class="dropdown-link" onclick="openSectionFolder('పుస్తక సమీక్షలు', 'బాల సాహిత్యం')">బాల సాహిత్యం సమీక్షలు</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-wrap">
+
+    <!-- About Section (నా గురించి) -->
+    <section id="about-sec" class="about-card">
+      <h2>👤 మా గురించి (About Us) & పోర్టల్ లక్ష్యాలు</h2>
+      <div class="author-info-box">
+        <p>👨‍🏫 <strong>రూపకర్త:</strong> బి. ప్రవీణ్ కుమార్ (M.A., T.P.T.)</p>
+        <p>🏫 స్కూల్ అసిస్టెంట్ (తెలుగు), సిద్దిపేట జిల్లా, తెలంగాణ.</p>
+        <p>📱 సంప్రదించవలసిన నంబర్: <strong>9908331738</strong> | ✉️ <strong>vidya-nidhi.in</strong></p>
+      </div>
+      <p class="about-desc">
+        <strong>పోర్టల్ ముఖ్య ఉద్దేశం:</strong> తెలంగాణ రాష్ట్ర SCERT పాఠ్యప్రణాళిక ఆధారంగా 6 నుండి 10వ తరగతి తెలుగు విద్యార్థులకు మరియు పోటీ పరీక్షల (TET, DSC, TRT, Gurukula) అభ్యర్థులకు సమగ్ర డిజిటల్ విద్యా వనరులను ఒకే వేదికపై ఉచితంగా అందించడమే "విద్యా నిధి" ముఖ్య ఉద్దేశం. పై నావిగేషన్ మెనూ నుండి మీరు కోరిన తరగతి లేదా విభాగాన్ని ఎంచుకుని, అందులోని సమగ్ర పాఠ్యదర్శిని నోట్స్, మోడల్ పేపర్లు, ఆన్‌లైన్ క్విజ్‌లు మరియు వీడియో పాఠాలను వీక్షించవచ్చు మరియు డౌన్‌లోడ్ చేసుకోవచ్చు.
+      </p>
+    </section>
+
+    <!-- ప్రత్యేక భాషా అభ్యసనం విభాగం -->
+    <section id="bhasha-sec" class="audio-section">
+      <div class="audio-header">
+        <div>
+          <h3>🔊 భాషా అభ్యసనం (ఆడియో ఉచ్చారణ)</h3>
+          <span style="font-size:0.85rem; color:#64748b; font-weight:600;">సబ్-నావిగేషన్ విభాగం</span>
+        </div>
+        <button class="close-folder-btn" onclick="closeBhashaSection()">✕ ఈ విభాగాన్ని మూసివేయండి</button>
+      </div>
+      <p style="font-size:0.92rem; color:#64748b; margin-bottom:12px;">
+        ఏదైనా అక్షరం లేదా పదంపై క్లిక్ చేయండి. స్పష్టమైన పెద్ద స్వరంతో (Loud Audio) స్వయంచాలక తెలుగు ఉచ్చారణ వినబడుతుంది.
+      </p>
+
+      <div class="audio-tabs">
+        <button id="btn-tab-varnamala" class="audio-tab-btn active" onclick="setTab('varnamala')">వర్ణమాల</button>
+        <button id="btn-tab-guninthalu" class="audio-tab-btn" onclick="setTab('guninthalu')">గుణింతాలు</button>
+        <button id="btn-tab-vottulu" class="audio-tab-btn" onclick="setTab('vottulu')">ఒత్తులు</button>
+        <button id="btn-tab-sarala" class="audio-tab-btn" onclick="setTab('sarala')">సరళ పదాలు</button>
+        <button id="btn-tab-dvitva" class="audio-tab-btn" onclick="setTab('dvitva')">ద్విత్వ పదాలు</button>
+        <button id="btn-tab-samyukta" class="audio-tab-btn" onclick="setTab('samyukta')">సంయుక్త పదాలు</button>
+        <button id="btn-tab-samslesha" class="audio-tab-btn" onclick="setTab('samslesha')">సంశ్లేష పదాలు</button>
+      </div>
+
+      <!-- వర్ణమాల -->
+      <div id="tab-varnamala" class="audio-panel active">
+        <strong style="color:var(--red); display:block; margin: 8px 0;">అచ్చులు</strong>
+        <div class="sound-grid">
+          <div class="sound-btn" onclick="speak('అ')">అ</div>
+          <div class="sound-btn" onclick="speak('ఆ')">ఆ</div>
+          <div class="sound-btn" onclick="speak('ఇ')">ఇ</div>
+          <div class="sound-btn" onclick="speak('ఈ')">ఈ</div>
+          <div class="sound-btn" onclick="speak('ఉ')">ఉ</div>
+          <div class="sound-btn" onclick="speak('ఊ')">ఊ</div>
+          <div class="sound-btn" onclick="speak('ఋ')">ఋ</div>
+          <div class="sound-btn" onclick="speak('ౠ')">ౠ</div>
+          <div class="sound-btn" onclick="speak('ఎ')">ఎ</div>
+          <div class="sound-btn" onclick="speak('ఏ')">ఏ</div>
+          <div class="sound-btn" onclick="speak('ఐ')">ఐ</div>
+          <div class="sound-btn" onclick="speak('ఒ')">ఒ</div>
+          <div class="sound-btn" onclick="speak('ఓ')">ఓ</div>
+          <div class="sound-btn" onclick="speak('ఔ')">ఔ</div>
+          <div class="sound-btn" onclick="speak('అం')">అం<span class="sound-sub">సున్న</span></div>
+          <div class="sound-btn" onclick="speak('అః')">అః<span class="sound-sub">విసర్గ</span></div>
+        </div>
+        <strong style="color:var(--red); display:block; margin: 16px 0 8px;">హల్లులు</strong>
+        <div class="sound-grid">
+          <div class="sound-btn" onclick="speak('క')">క</div>
+          <div class="sound-btn" onclick="speak('ఖ')">ఖ</div>
+          <div class="sound-btn" onclick="speak('గ')">గ</div>
+          <div class="sound-btn" onclick="speak('ఘ')">ఘ</div>
+          <div class="sound-btn" onclick="speak('ఙ')">ఙ</div>
+          <div class="sound-btn" onclick="speak('చ')">చ</div>
+          <div class="sound-btn" onclick="speak('ఛ')">ఛ</div>
+          <div class="sound-btn" onclick="speak('జ')">జ</div>
+          <div class="sound-btn" onclick="speak('ఝ')">ఝ</div>
+          <div class="sound-btn" onclick="speak('ఞ')">ఞ</div>
+          <div class="sound-btn" onclick="speak('ట')">ట</div>
+          <div class="sound-btn" onclick="speak('ఠ')">ఠ</div>
+          <div class="sound-btn" onclick="speak('డ')">డ</div>
+          <div class="sound-btn" onclick="speak('ఢ')">ఢ</div>
+          <div class="sound-btn" onclick="speak('ణ')">ణ</div>
+          <div class="sound-btn" onclick="speak('త')">త</div>
+          <div class="sound-btn" onclick="speak('థ')">థ</div>
+          <div class="sound-btn" onclick="speak('ద')">ద</div>
+          <div class="sound-btn" onclick="speak('ధ')">ధ</div>
+          <div class="sound-btn" onclick="speak('న')">న</div>
+          <div class="sound-btn" onclick="speak('ప')">ప</div>
+          <div class="sound-btn" onclick="speak('ఫ')">ఫ</div>
+          <div class="sound-btn" onclick="speak('బ')">బ</div>
+          <div class="sound-btn" onclick="speak('భ')">భ</div>
+          <div class="sound-btn" onclick="speak('మ')">మ</div>
+          <div class="sound-btn" onclick="speak('య')">య</div>
+          <div class="sound-btn" onclick="speak('ర')">ర</div>
+          <div class="sound-btn" onclick="speak('ల')">ల</div>
+          <div class="sound-btn" onclick="speak('వ')">వ</div>
+          <div class="sound-btn" onclick="speak('శ')">శ</div>
+          <div class="sound-btn" onclick="speak('ష')">ష</div>
+          <div class="sound-btn" onclick="speak('స')">స</div>
+          <div class="sound-btn" onclick="speak('హ')">హ</div>
+          <div class="sound-btn" onclick="speak('ళ')">ళ</div>
+          <div class="sound-btn" onclick="speak('క్ష')">క్ష</div>
+          <div class="sound-btn" onclick="speak('ఱ')">ఱ</div>
+        </div>
+      </div>
+
+      <!-- గుణింతాలు -->
+      <div id="tab-guninthalu" class="audio-panel">
+        <strong style="color:var(--green); display:block; margin: 8px 0;">'క' గుణింతం</strong>
+        <div class="sound-grid">
+          <div class="sound-btn" onclick="speak('క')">క</div>
+          <div class="sound-btn" onclick="speak('కా')">కా</div>
+          <div class="sound-btn" onclick="speak('కి')">కి</div>
+          <div class="sound-btn" onclick="speak('కీ')">కీ</div>
+          <div class="sound-btn" onclick="speak('కు')">కు</div>
+          <div class="sound-btn" onclick="speak('కూ')">కూ</div>
+          <div class="sound-btn" onclick="speak('కృ')">కృ</div>
+          <div class="sound-btn" onclick="speak('కె')">కె</div>
+          <div class="sound-btn" onclick="speak('కే')">కే</div>
+          <div class="sound-btn" onclick="speak('కై')">కై</div>
+          <div class="sound-btn" onclick="speak('కొ')">కొ</div>
+          <div class="sound-btn" onclick="speak('కో')">కో</div>
+          <div class="sound-btn" onclick="speak('కౌ')">కౌ</div>
+          <div class="sound-btn" onclick="speak('కం')">కం</div>
+          <div class="sound-btn" onclick="speak('కః')">కః</div>
+        </div>
+      </div>
+
+      <!-- ఒత్తులు -->
+      <div id="tab-vottulu" class="audio-panel">
+        <strong style="color:var(--green); display:block; margin: 8px 0;">ముఖ్యమైన ఒత్తులు</strong>
+        <div class="sound-grid">
+          <div class="sound-btn" onclick="speak('క ఒత్తు')">్క<span class="sound-sub">క ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('గ ఒత్తు')">్గ<span class="sound-sub">గ ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('చ ఒత్తు')">్చ<span class="sound-sub">చ ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('జ ఒత్తు')">్జ<span class="sound-sub">జ ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('ట ఒత్తు')">్ట<span class="sound-sub">ట ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('డ ఒత్తు')">్డ<span class="sound-sub">డ ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('త ఒత్తు')">్త<span class="sound-sub">త ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('ద ఒత్తు')">్ద<span class="sound-sub">ద ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('న ఒత్తు')">్న<span class="sound-sub">న ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('ప ఒత్తు')">్ప<span class="sound-sub">ప ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('మ ఒత్తు')">్మ<span class="sound-sub">మ ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('య ఒత్తు')">్య<span class="sound-sub">య ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('ర ఒత్తు')">్ర<span class="sound-sub">ర ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('ల ఒత్తు')">్ల<span class="sound-sub">ల ఒత్తు</span></div>
+          <div class="sound-btn" onclick="speak('వ ఒత్తు')">్వ<span class="sound-sub">వ ఒత్తు</span></div>
+        </div>
+      </div>
+
+      <!-- సరళ పదాలు -->
+      <div id="tab-sarala" class="audio-panel">
+        <strong style="color:var(--green); display:block; margin: 8px 0;">సరళ పదాలు</strong>
+        <div class="sound-grid words">
+          <div class="sound-btn" onclick="speak('అరక')">అరక</div>
+          <div class="sound-btn" onclick="speak('ఆట')">ఆట</div>
+          <div class="sound-btn" onclick="speak('ఈగ')">ఈగ</div>
+          <div class="sound-btn" onclick="speak('ఉడత')">ఉడత</div>
+          <div class="sound-btn" onclick="speak('కలము')">కలము</div>
+          <div class="sound-btn" onclick="speak('గడప')">గడప</div>
+          <div class="sound-btn" onclick="speak('పలక')">పలక</div>
+          <div class="sound-btn" onclick="speak('వల')">వల</div>
+          <div class="sound-btn" onclick="speak('భవనం')">భవనం</div>
+        </div>
+      </div>
+
+      <!-- ద్విత్వ పదాలు -->
+      <div id="tab-dvitva" class="audio-panel">
+        <strong style="color:var(--green); display:block; margin: 8px 0;">ద్విత్వ పదాలు</strong>
+        <div class="sound-grid words">
+          <div class="sound-btn" onclick="speak('అక్క')">అక్క<span class="sound-sub">క-క్కు</span></div>
+          <div class="sound-btn" onclick="speak('మొగ్గ')">మొగ్గ<span class="sound-sub">గ-గ్గు</span></div>
+          <div class="sound-btn" onclick="speak('పచ్చ')">పచ్చ<span class="sound-sub">చ-చ్చు</span></div>
+          <div class="sound-btn" onclick="speak('చెట్టు')">చెట్టు<span class="sound-sub">ట-ట్టు</span></div>
+          <div class="sound-btn" onclick="speak('కప్ప')">కప్ప<span class="sound-sub">ప-ప్పు</span></div>
+          <div class="sound-btn" onclick="speak('అమ్మ')">అమ్మ<span class="sound-sub">మ-మ్ము</span></div>
+          <div class="sound-btn" onclick="speak('పిల్లి')">పిల్లి<span class="sound-sub">ల-ల్లి</span></div>
+          <div class="sound-btn" onclick="speak('నవ్వు')">నవ్వు<span class="sound-sub">వ-వ్వు</span></div>
+        </div>
+      </div>
+
+      <!-- సంయుక్త పదాలు -->
+      <div id="tab-samyukta" class="audio-panel">
+        <strong style="color:var(--green); display:block; margin: 8px 0;">సంయుక్త పదాలు</strong>
+        <div class="sound-grid words">
+          <div class="sound-btn" onclick="speak('పుస్తకం')">పుస్తకం<span class="sound-sub">స+త</span></div>
+          <div class="sound-btn" onclick="speak('ఖడ్గం')">ఖడ్గం<span class="sound-sub">డ+గ</span></div>
+          <div class="sound-btn" onclick="speak('రత్నం')">రత్నం<span class="sound-sub">త+న</span></div>
+          <div class="sound-btn" onclick="speak('విద్య')">విద్య<span class="sound-sub">ద+య</span></div>
+          <div class="sound-btn" onclick="speak('భక్తి')">భక్తి<span class="sound-sub">క+త</span></div>
+          <div class="sound-btn" onclick="speak('మిత్రుడు')">మిత్రుడు<span class="sound-sub">త+ర</span></div>
+          <div class="sound-btn" onclick="speak('సూర్యుడు')">సూర్యుడు<span class="sound-sub">ర+య</span></div>
+        </div>
+      </div>
+
+      <!-- సంశ్లేష పదాలు -->
+      <div id="tab-samslesha" class="audio-panel">
+        <strong style="color:var(--green); display:block; margin: 8px 0;">సంశ్లేష పదాలు</strong>
+        <div class="sound-grid words">
+          <div class="sound-btn" onclick="speak('రాష్ట్రము')">రాష్ట్రము<span class="sound-sub">ష+ట+ర</span></div>
+          <div class="sound-btn" onclick="speak('స్త్రీ')">స్త్రీ<span class="sound-sub">స+త+ర</span></div>
+          <div class="sound-btn" onclick="speak('జ్యోత్స్న')">జ్యోత్స్న<span class="sound-sub">త+స+న</span></div>
+          <div class="sound-btn" onclick="speak('లక్ష్మి')">లక్ష్మి<span class="sound-sub">క+ష+మ</span></div>
+          <div class="sound-btn" onclick="speak('ఈర్ష్య')">ఈర్ష్య<span class="sound-sub">ర+ష+య</span></div>
+          <div class="sound-btn" onclick="speak('సామర్థ్యం')">సామర్థ్యం<span class="sound-sub">ర+థ+య</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- క్లౌడ్ మెటీరియల్స్ ఫోల్డర్ డిస్ప్లే సెక్షన్ -->
+    <section id="selectedFolderSection" class="selected-folder-section">
+      <div class="folder-header">
+        <div>
+          <h3 id="folderHeading">📁 మెటీరియల్స్</h3>
+          <span class="folder-badge" id="folderSubBadge">సబ్-నావిగేషన్</span>
+        </div>
+        <button class="close-folder-btn" onclick="closeFolderView()">✕ ఈ విభాగాన్ని మూసివేయండి</button>
+      </div>
+      <div class="materials-grid" id="folderMaterialsGrid"></div>
+    </section>
+
+    <!-- AdSense Approval కోసం సమగ్ర తెలుగు సాహిత్య & వ్యాకరణ విజ్ఞాన వ్యాసాలు -->
+    <section id="edu-articles-sec" class="edu-articles-section">
+      <h2 class="section-main-title">📚 సమగ్ర తెలుగు వ్యాకరణం & సాహిత్య విజ్ఞాన దర్శిని</h2>
+
+      <div class="articles-grid">
+        <!-- వ్యాసం 1: తెలుగు మరియు సంస్కృత సంధులు -->
+        <article class="article-box">
+          <h3>1. సంధులు - నిర్వచనం మరియు ప్రధాన రకాలు</h3>
+          <p>
+            <strong>సంధి అనగా:</strong> "పూర్వపర స్వరములకు పరస్వరము ఏకాదేశమగుట సంధి" అని చిన్నయసూరి బాలవ్యాకరణంలో నిర్వచించారు. మొదటి పదం చివర ఉన్న అచ్చునకు (పూర్వ స్వరం), రెండవ పదం మొదట ఉన్న అచ్చునకు (పర స్వరం) మధ్య కలయిక జరిగి పరస్వరం నిలవడాన్ని సంధి అంటారు.
+          </p>
+          <ul>
+            <li><strong>ఉత్వ సంధి:</strong> ఉత్తునకు అచ్చు పరమగునపుడు సంధి నిత్యముగా నగును. (ఉదా: రాముడు + అతడు = రాముడతడు, సోముడు + ఇతడు = సోముడితడు).</li>
+            <li><strong>ఇత్వ సంధి:</strong> ఏమ్యాదుల ఇత్తునకు సంధి వైకల్పికముగా నగును. (ఉదా: ఏమి + అంటివి = ఏమంటివి / ఏమియంటివి).</li>
+            <li><strong>అత్వ సంధి:</strong> అత్తునకు సంధి బహుళముగా నగును. (ఉదా: రామ + అయ్య = రామయ్య, మేన + అల్లుడు = మేనల్లుడు).</li>
+            <li><strong>సవర్ణదీర్ఘ సంధి:</strong> అ, ఇ, ఉ, ఋ లకు సవర్ణములైన అచ్చులు పరమైనప్పుడు వాని దీర్ఘములు ఏకాదేశమగును. (ఉదా: రామ + ఆలయము = రామాలయము, కవి + ఈశ్వరుడు = కవీశ్వరుడు, గురు + ఉపదేశము = గురూపదేశము).</li>
+            <li><strong>గుణ సంధి:</strong> అకారమునకు ఇ, ఉ, ఋ లు పరమైనప్పుడు క్రమముగా ఏ, ఓ, ఆర్ లు ఏకాదేశమగును. (ఉదా: మహా + ఇంద్రుడు = మహేంద్రుడు, సూర్య + ఉదయము = సూర్యోదయము).</li>
+            <li><strong>వృద్ధి సంధి:</strong> అకారమునకు ఏ, ఐ లు పరమైతే 'ఐ' కారము, ఓ, ఔ లు పరమైతే 'ఔ' కారము ఏకాదేశమగును. (ఉదా: ఏక + ఏక = ఏకైక, అష్ట + ఐశ్వర్యము = అష్టైశ్వర్యము).</li>
+            <li><strong>యణాదేశ సంధి:</strong> ఇ, ఉ, ఋ లకు అసవర్ణములైన అచ్చులు పరమైనప్పుడు క్రమముగా య, వ, ర లు ఆదేశమగును. (ఉదా: అతి + అంత = అత్యంత, అణు + అస్త్రం = అణ్వస్త్రం).</li>
+          </ul>
+        </article>
+
+        <!-- వ్యాసం 2: సమాసాలు మరియు విగ్రహవాక్యాలు -->
+        <article class="article-box green-top">
+          <h3>2. సమాసాలు - విగ్రహవాక్యాలు & విభజన</h3>
+          <p>
+            <strong>సమాసము అనగా:</strong> సమర్థములైన రెండు గానీ, అంతకంటే ఎక్కువ గానీ పదాలు అర్థవంతంగా ఏకపదంగా ఏర్పడటాన్ని 'సమాసము' అంటారు. సమాసంలోని మొదటి పదాన్ని 'పూర్వపదం' అని, రెండవ పదాన్ని 'ఉత్తరపదం' అని పిలుస్తారు. పదాల మధ్య సంబంధాన్ని వివరించే వాక్యాన్ని 'విగ్రహవాక్యం' అంటారు.
+          </p>
+          <table class="grammar-table">
+            <thead>
+              <tr>
+                <th>సమాసం పేరు</th>
+                <th>లక్షణం</th>
+                <th>ఉదాహరణ (విగ్రహవాక్యం)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>తత్పురుష సమాసం</td>
+                <td>ఉత్తరపదార్థ ప్రధానం</td>
+                <td>రాజభటుడు (రాజు యొక్క భటుడు - షష్ఠీ తత్పురుష)</td>
+              </tr>
+              <tr>
+                <td>కర్మధారయ సమాసం</td>
+                <td>విశేషణ, విశేష్య సంబంధం</td>
+                <td>నీలమేఘము (నీలమైన మేఘము - విశేషణ పూర్వపద)</td>
+              </tr>
+              <tr>
+                <td>ద్విగు సమాసం</td>
+                <td>సంఖ్యావాచక పూర్వపదం</td>
+                <td>ముల్లోకములు (మూడు సంఖ్య గల లోకములు)</td>
+              </tr>
+              <tr>
+                <td>ద్వంద్వ సమాసం</td>
+                <td>ఉభయపదార్థ ప్రధానం</td>
+                <td>తల్లిదండ్రులు (తల్లియును, తండ్రియును)</td>
+              </tr>
+              <tr>
+                <td>బహువ్రీహి సమాసం</td>
+                <td>అన్యపదార్థ ప్రధానం</td>
+                <td>చక్రపాణి (చక్రము పాణియందు కలవాడు - విష్ణువు)</td>
+              </tr>
+              <tr>
+                <td>అవ్యయీభావ సమాసం</td>
+                <td>పూర్వపదార్థ ప్రధానం</td>
+                <td>యథాశక్తి (శక్తిని అనుసరించి)</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- వ్యాసం 3: ఛందస్సు - వృత్తాలు, జాతులు, ఉపజాతులు -->
+        <article class="article-box yellow-top">
+          <h3>3. తెలుగు ఛందస్సు - పద్య లక్షణాలు & గణ విభజన</h3>
+          <p>
+            పద్య రచనకు ఉపయోగపడే గురు-లఘువుల నియమాలను తెలిపే శాస్త్రాన్ని <strong>ఛందస్సు</strong> అంటారు. తెలుగు సాహిత్యంలో పద్యాలను ప్రధానంగా వృత్తాలు, జాతులు, ఉపజాతులు అని మూడు రకాలుగా వర్గీకరించారు. య, మ, త, రా, జ, భా, న, స అనే సూత్రం ఆధారంగా మూడక్షరాల గణాలను గుర్తిస్తారు.
+          </p>
+          <ul>
+            <li><strong>ఉత్పలమాల:</strong> ప్రతి పాదంలో <strong>భ, ర, న, భ, భ, ర, వ</strong> అనే గణాలు వరుసగా ఉంటాయి. పాదానికి 20 అక్షరాలు ఉంటాయి. 10వ అక్షరం యతి స్థానం. ప్రాస నియమం కలదు.</li>
+            <li><strong>చంపకమాల:</strong> ప్రతి పాదంలో <strong>న, జ, భ, జ, జ, జ, ర</strong> అనే గణాలు వరుసగా ఉంటాయి. పాదానికి 21 అక్షరాలు ఉంటాయి. 11వ అక్షరం యతి స్థానం. ప్రాస నియమం కలదు.</li>
+            <li><strong>శార్దూలము:</strong> ప్రతి పాదంలో <strong>మ, స, జ, స, త, త, గ</strong> అనే గణాలు ఉంటాయి. పాదానికి 19 అక్షరాలు, 13వ అక్షరం యతి స్థానం.</li>
+            <li><strong>మత్తేభము:</strong> ప్రతి పాదంలో <strong>స, భ, ర, న, మ, య, వ</strong> అనే గణాలు ఉంటాయి. పాదానికి 20 అక్షరాలు, 14వ అక్షరం యతి స్థానం.</li>
+            <li><strong>కంద పద్యం (జాతి పద్యం):</strong> ఇది 4 పాదాల పద్యం. 1, 3 పాదాలలో 3 గణాలు, 2, 4 పాదాలలో 5 గణాలు ఉంటాయి. భ, జ, స, నల, గగ అనే చతుర్మాత్రా గణాలు మాత్రమే వాడతారు. 2, 4 పాదాల చివర గురువు ఉండాలి.</li>
+            <li><strong>ఆటవెలది & తేటగీతి (ఉపజాతులు):</strong> వీటిలో సూర్య (న, హ), ఇంద్ర (నల, నగ, సల, భ, ర, త) గణాలు ఉంటాయి. వీటికి ప్రాస నియమం ఉండదు, యతి లేదా ప్రాసయతి చెల్లుతుంది.</li>
+          </ul>
+        </article>
+
+        <!-- వ్యాసం 4: అలంకారాలు - శబ్దాలంకారాలు & అర్థాలంకారాలు -->
+        <article class="article-box">
+          <h3>4. అలంకారాలు - కావ్య సౌందర్య విశేషాలు</h3>
+          <p>
+            మనిషికి ఆభరణాలు ఎలా అందాన్ని ఇస్తాయో, భాషకు, కవిత్వానికి అందాన్ని చేకూర్చే వాటిని <strong>అలంకారాలు</strong> అంటారు. ఇవి ప్రధానంగా 1) శబ్దాలంకారాలు (శబ్ద చమత్కారం ప్రధానం), 2) అర్థాలంకారాలు (అర్థ చమత్కారం ప్రధానం) అని రెండు రకాలు.
+          </p>
+          <ul>
+            <li><strong>వృత్త్యనుప్రాస అలంకారం:</strong> ఒకే హల్లు అనేకసార్లు తిరిగి తిరిగి రావడం. (ఉదా: "చిటపట చినుకులు టపటప కురిసెను").</li>
+            <li><strong>ఛేకానుప్రాస అలంకారం:</strong> రెండు లేదా అంతకంటే ఎక్కువ హల్లుల జంట అర్థ భేదంతో వెంటవెంటనే రావడం. (ఉదా: "అరటి తొక్క తొక్కరాదు").</li>
+            <li><strong>యమకం:</strong> అక్షరాల సముదాయం అర్థ భేదంతో మరల మరల రావడం. (ఉదా: "లేమా! దనుజుల గెలువగ లేమా!").</li>
+            <li><strong>ఉపమాలంకారం:</strong> ఉపమేయానికి, ఉపమానానికి చక్కని పోలిక చెప్పడం. (ఉదా: "ఆమె ముఖము చంద్రబింబము వలె అందముగా ఉన్నది").</li>
+            <li><strong>రూపకాలంకారం:</strong> ఉపమేయానికి, ఉపమానానికి భేదం లేదని (అభేదం) చెప్పడం. (ఉదా: "లతాలలనలు రాజుపై కుసుమాక్షతలు చల్లిరి").</li>
+            <li><strong>అతిశయోక్తి అలంకారం:</strong> ఉన్న విషయాన్ని ఉన్నదానికంటే ఎక్కువ చేసి (గోరంతలు కొండంతలుగా) వర్ణించడం. (ఉదా: "ఆ భవనములు ఆకాశమును తాకుచున్నవి").</li>
+            <li><strong>స్వభావోక్తి అలంకారం:</strong> జాతి, గుణ, క్రియాదుల చేత ఉన్న వస్తువును ఉన్నట్లుగా కళ్లకు కట్టినట్లు వర్ణించడం.</li>
+          </ul>
+        </article>
+
+        <!-- వ్యాసం 5: తెలంగాణ సాహిత్యం & ప్రముఖ పాఠ్యాంశాల విశ్లేషణ -->
+        <article class="article-box green-top">
+          <h3>5. SCERT పాఠ్యపుస్తకాల ప్రముఖ కవులు & ప్రక్రియలు</h3>
+          <p>
+            తెలంగాణ పాఠశాల విద్యాశాఖ (SCERT) రూపొందించిన 6 నుండి 10వ తరగతి తెలుగు వాచకాలలో ప్రాచీన మరియు ఆధునిక కవుల రచనలు విద్యార్థులలో నైతిక విలువలు, సామాజిక స్పృహ, భాషాభిరుచిని పెంపొందించేలా కూర్చబడ్డాయి.
+          </p>
+          <ul>
+            <li><strong>బమ్మెర పోతన (దానశీలము):</strong> సహజ పండితుడైన పోతన రచించిన శ్రీమదాంధ్ర భాగవతం అష్టమ స్కంధంలోని వామనావతార ఘట్టం ద్వారా బలిచక్రవర్తి దాతృత్వం, ఇచ్చిన మాటకు కట్టుబడే గొప్ప గుణం వివరించబడింది.</li>
+            <li><strong>దాశరథి కృష్ణమాచార్య (వీర తెలంగాణ):</strong> "నా తెలంగాణ కోటి రతనాల వీణ" అని ఎలుగెత్తి చాటిన దాశరథి రుద్రవీణ, అగ్నిధార, మహాంధ్రోదయం వంటి రచనలతో తెలంగాణ విముక్తి పోరాట స్ఫూర్తిని నింపారు.</li>
+            <li><strong>సామల సదాశివ (ఎవరి భాష వాళ్లకు వినసొంపు):</strong> కేంద్ర సాహిత్య అకాడమీ పురస్కార గ్రహీత సామల సదాశివ గారు ప్రాంతీయ భాషా మాండలికాల సొగసును, ప్రజల జీవద్భాష గొప్పతనాన్ని 'యాది' వ్యాసాల ద్వారా తెలియజేశారు.</li>
+            <li><strong>పాకాల యశోదారెడ్డి (కొత్తబాట):</strong> తెలంగాణ పల్లె జీవన చిత్రణను, స్త్రీల కష్టసుఖాలను అచ్చమైన తెలంగాణ నుడికారంతో కథలుగా మలిచిన విశిష్ట రచయిత్రి.</li>
+            <li><strong>శ్రీనాథుడు (భిక్ష):</strong> కవిసార్వభౌముడు శ్రీనాథుడు కాశీఖండం ద్వారా వ్యాసమహర్షి కాశీ నగరంలో పడిన భిక్షాటన పరీక్షను, అన్నపూర్ణాదేవి కరుణా కటాక్షాలను అద్భుతమైన పద్య శైలిలో రచించారు.</li>
+          </ul>
+        </article>
+
+        <!-- వ్యాసం 6: తరగతి గది బోధన & పరీక్షల తయారీ సూచనలు -->
+        <article class="article-box yellow-top">
+          <h3>6. తెలుగు పరీక్షలలో అత్యధిక మార్కులు సాధించే మెలకువలు</h3>
+          <p>
+            పాఠశాల స్థాయి నిర్మాణాత్మక మూల్యాంకనం (FA-1, FA-2, FA-3, FA-4) మరియు సంగ్రహణాత్మక మూల్యాంకనం (SA-1, SA-2) పరీక్షలలో, అలాగే 10వ తరగతి పబ్లిక్ పరీక్షలలో తెలుగులో 10/10 GPA సాధించడానికి విద్యార్థులు సామర్థ్యాల వారీగా సాధన చేయాలి.
+          </p>
+          <ul>
+            <li><strong>అవగాహన - ప్రతిస్పందన:</strong> పరిచిత మరియు అపరిచిత గద్యాలు, పద్యాలను క్షుణ్ణంగా చదివి ప్రశ్నలకు నేరుగా, స్పష్టమైన వాక్యాలలో సమాధానాలు రాయాలి. కంఠస్థ పద్యాలను తప్పులు లేకుండా (చుక్కల పద్యాలు) పూర్తి చేయాలి మరియు ప్రతిపదార్థాలను సాధన చేయాలి.</li>
+            <li><strong>వ్యక్తీకరణ - సృజనాత్మకత:</strong> లఘు మరియు వ్యాసరూప ప్రశ్నలకు సమాధానాలు రాసేటప్పుడు కవి పరిచయం, నేపథ్యం, ముఖ్యాంశాలను సైడ్ హెడ్డింగ్‌లతో రాయాలి. లేఖా రచన, కరపత్రం, సంభాషణ, వార్తా నివేదిక, నినాదాలు రాసేటప్పుడు ఆయా ప్రక్రియల ఆకృతిని (Format) కచ్చితంగా పాటించాలి.</li>
+            <li><strong>భాషాంశాలు (పదజాలం & వ్యాకరణం):</strong> అర్థాలు, పర్యాయపదాలు, నానార్థాలు, వ్యుత్పత్త్యర్థాలు, ప్రకృతి-వికృతులు, జాతీయాలు మరియు సామెతలను పాఠ్యాంశాల వెనుక ఉన్న అభ్యాసాల నుండి క్రమం తప్పకుండా సాధన చేయాలి.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Google AdSense Mandatory Policy Sections (Privacy Policy, Terms, Disclaimer, Contact) -->
+    <section id="policy-sec" class="policy-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+        <h3 id="policyTitle" style="margin:0; border:none;">🔒 గోప్యతా విధానం & నిబంధనలు (Policies)</h3>
+        <button class="close-folder-btn" onclick="closePolicySection()">✕ మూసివేయండి</button>
+      </div>
+      <div id="policyContent"></div>
+    </section>
+
+  </main>
+
+  <!-- రహస్య అడ్మిన్ మోడల్ -->
+  <div class="secret-modal" id="secretAdminModal">
+    <div class="modal-card">
+      <button class="close-btn" onclick="closeAdmin()">✕</button>
+
+      <!-- 1. Admin Login View -->
+      <div id="secLoginView">
+        <h3 style="color:var(--red); margin-bottom:4px;">🔐 అడ్మిన్ అధికారిక ప్రవేశం</h3>
+        <p style="font-size:0.85rem; color:#64748b; margin-bottom:14px;">ఫైర్‌బేస్ ఈమెయిల్ మరియు పాస్‌వర్డ్‌తో లాగిన్ అవ్వండి</p>
+        <form id="secLoginForm">
+          <div class="field">
+            <label>అడ్మిన్ ఈమెయిల్ (Email)</label>
+            <input type="email" id="secEmail" required autocomplete="username" placeholder="admin@vidyanidhi.com">
+          </div>
+          <div class="field">
+            <label>పాస్‌వర్డ్ (Password)</label>
+            <input type="password" id="secPass" required autocomplete="current-password" placeholder="••••••••">
+          </div>
+          <button type="submit" class="submit-btn" id="loginSubmitBtn">ప్రవేశించండి (Sign In)</button>
+          <div id="secLoginMsg" class="msg"></div>
+        </form>
+      </div>
+
+      <!-- 2. Admin Dashboard & Fail-Safe Cloud Upload Form -->
+      <div id="secUploadView" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:2px solid var(--border); padding-bottom:8px;">
+          <div>
+            <h3 style="color:var(--green); font-size:1.25rem;">📤 ఫైల్ అప్‌లోడ్ & నిర్వహణ</h3>
+            <span id="adminUserTag" style="font-size:0.78rem; color:#64748b; font-weight:600;"></span>
+          </div>
+          <button onclick="adminLogout()" style="background:#fee2e2; color:var(--red); border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:800;">లాగౌట్</button>
+        </div>
+
+        <form id="secUploadForm">
+          <div class="field">
+            <label>శీర్షిక (Title) *</label>
+            <input type="text" id="itemTitle" required placeholder="ఉదా: 10వ తరగతి దానశీలము నోట్స్ లేదా ప్రశ్నాపత్రం">
+          </div>
+
+          <div class="field">
+            <label>ప్రధాన నావిగేషన్ విభాగం (Navigation) *</label>
+            <select id="mainNav" onchange="updateSubNav()" required>
+              <option value="">-- ఎంచుకోండి --</option>
+              <option value="డిజిటల్ పుస్తకాలు">డిజిటల్ పుస్తకాలు</option>
+              <option value="పాఠ్యపుస్తకాలు">పాఠ్యపుస్తకాలు</option>
+              <option value="మాదిరి ప్రశ్న పత్రాలు">మాదిరి ప్రశ్న పత్రాలు</option>
+              <option value="వ్యాకరణాంశాలు">వ్యాకరణాంశాలు</option>
+              <option value="సాహిత్య అంశాలు">సాహిత్య అంశాలు</option>
+              <option value="ప్రాజెక్టులు">ప్రాజెక్టులు</option>
+              <option value="పుస్తక సమీక్షలు">పుస్తక సమీక్షలు</option>
+              <option value="క్విజ్">క్విజ్</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>సబ్-నావిగేషన్ (Sub-Navigation) *</label>
+            <select id="subNav" required>
+              <option value="సాధారణ">సాధారణ</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>వివరణ (చిన్న సమాచారం)</label>
+            <textarea id="itemDesc" rows="2" placeholder="పాఠం లేదా ప్రశ్నాపత్రం వివరాలు"></textarea>
+          </div>
+
+          <div class="field" style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #cbd5e1;">
+            <label>📁 ఫైల్ ఎంచుకోండి (గరిష్ట పరిమాణం 15 MB - PDF, PPT, Excel, Word)</label>
+            <input type="file" id="itemFile" accept=".pdf,.ppt,.pptx,.xls,.xlsx,.doc,.docx">
+          </div>
+
+          <!-- Dynamic 100% Progress Bar -->
+          <div id="uploadProgressBox" class="progress-box">
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:4px;">
+              <span id="uploadStatusText">క్లౌడ్‌కు అప్‌లోడ్ అవుతోంది...</span>
+              <span id="uploadPercent">0%</span>
+            </div>
+            <div style="background:#cbd5e1; height:8px; border-radius:4px; overflow:hidden;">
+              <div id="uploadProgressBar" class="progress-bar-inner"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>🎥 YouTube వీడియో లింక్ (ఉంటే ఇవ్వండి)</label>
+            <input type="url" id="itemYt" placeholder="https://www.youtube.com/watch?v=...">
+          </div>
+
+          <div class="field">
+            <label>🔗 Google Drive / డైరెక్ట్ డౌన్‌లోడ్ వెబ్ లింక్</label>
+            <input type="url" id="itemUrl" placeholder="https://drive.google.com/...">
+          </div>
+
+          <button type="submit" class="submit-btn" id="uploadSubmitBtn" style="background:var(--green); margin-top:8px;">శాశ్వతంగా ప్రచురించండి (Cloud Publish)</button>
+          <div id="secUploadMsg" class="msg"></div>
+        </form>
+
+        <!-- Permanent Delete Management Section -->
+        <div class="admin-manage-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h4 style="font-size:1.15rem; color:var(--red); font-weight:800; display:flex; align-items:center; gap:6px;">
+              🗑️ ఫైళ్ల శాశ్వత తొలగింపు (Permanent Delete)
+            </h4>
+            <span style="font-size:0.75rem; background:#fee2e2; color:var(--red); padding:3px 8px; border-radius:6px; font-weight:700;">అడ్మిన్ మాత్రమే</span>
+          </div>
+          <p style="font-size:0.82rem; color:#718096; margin-bottom:14px;">
+            ఇక్కడ నుండి ఫైల్‌ను తొలగిస్తే అది Firebase Cloud సర్వర్ నుండి శాశ్వతంగా డిలీట్ అవుతుంది.
+          </p>
+          <div id="adminFilesList" style="max-height:280px; overflow-y:auto; padding-right:4px;">
+            <p style="font-size:0.85rem; color:#64748b;">ఫైళ్లు లోడ్ అవుతున్నాయి...</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-links">
+      <a onclick="showHomeView()">🏠 హోమ్ (Home)</a>
+      <a onclick="openPolicyModal('about')">👤 మా గురించి (About Us)</a>
+      <a onclick="openPolicyModal('privacy')">🔒 గోప్యతా విధానం (Privacy Policy)</a>
+      <a onclick="openPolicyModal('terms')">📜 నిబంధనలు (Terms & Conditions)</a>
+      <a onclick="openPolicyModal('disclaimer')">⚠️ నిరాకరణ (Disclaimer)</a>
+      <a onclick="openPolicyModal('contact')">📞 సంప్రదించండి (Contact Us)</a>
+    </div>
+    <p><span class="secret-trigger" id="secretTrigger" title="డబుల్ క్లిక్ చేసి అడ్మిన్ ప్యానెల్ తెరవండి">©</span> 2026 విద్యా నిధి (vidya-nidhi.in) • రూపకర్త: బి. ప్రవీణ్ కుమార్ • సమగ్ర తెలుగు డిజిటల్ విద్యా వేదిక</p>
+    <div class="ads-txt-footer">google.com, pub-1307250597168110, DIRECT, f08c47fec0942fa0</div>
+  </footer>
+
+  <script>
+    // -------------------------------------------------------------------------
+    // 1. Google Firebase ప్రాజెక్ట్ కాన్ఫిగరేషన్
+    // -------------------------------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyDE-P2KuIMj7vwUDXyDoRyRP-v7pJv2gwE",
+      authDomain: "vidyanidhi-fb9a2.firebaseapp.com",
+      databaseURL: "https://vidyanidhi-fb9a2-default-rtdb.firebaseio.com",
+      projectId: "vidyanidhi-fb9a2",
+      storageBucket: "vidyanidhi-fb9a2.firebasestorage.app",
+      messagingSenderId: "421338680272",
+      appId: "1:421338680272:web:c6e0829b5b0779d1a347d5",
+      measurementId: "G-81PPB1TNNZ"
+    };
+
+    let db = null;
+    let auth = null;
+    let storage = null;
+    let isCloudEnabled = false;
+
+    try {
+      if (typeof firebase !== 'undefined' && firebaseConfig.apiKey) {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        auth = firebase.auth();
+        storage = firebase.storage();
+        if (firebase.analytics) {
+          firebase.analytics();
+        }
+        isCloudEnabled = true;
+      }
+    } catch(e) {
+      console.warn("Firebase Init Error:", e);
+    }
+
+    try {
+      ['vn_portal_materials_v8', 'vn_portal_materials_v9', 'vn_portal_materials_v10', 'vn_portal_materials_v11'].forEach(k => localStorage.removeItem(k));
+    } catch(e) {}
+
+    // ఆడియో ఉచ్చారణ
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'te-IN';
+        msg.volume = 1.0;
+        msg.rate = 0.85;
+        msg.pitch = 1.0;
+        const voices = window.speechSynthesis.getVoices();
+        const teVoice = voices.find(v => v.lang === 'te-IN' || v.lang.startsWith('te'));
+        if (teVoice) msg.voice = teVoice;
+        window.speechSynthesis.speak(msg);
+      }
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    // భాషా అభ్యసనం ట్యాబ్ మారే లాజిక్
+    function setTab(tabId) {
+      document.querySelectorAll('.audio-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.audio-tab-btn').forEach(b => b.classList.remove('active'));
+      
+      const panel = document.getElementById('tab-' + tabId);
+      if (panel) panel.classList.add('active');
+      
+      const tabBtn = document.getElementById('btn-tab-' + tabId);
+      if (tabBtn) tabBtn.classList.add('active');
+    }
+
+    function openBhashaTab(tabId) {
+      document.getElementById('selectedFolderSection').style.display = 'none';
+      const bhashaSec = document.getElementById('bhasha-sec');
+      bhashaSec.style.display = 'block';
+      setTab(tabId);
+      bhashaSec.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeBhashaSection() {
+      document.getElementById('bhasha-sec').style.display = 'none';
+    }
+
+    // Google AdSense Policy Views (Privacy Policy, Terms, Disclaimer, Contact)
+    const policyData = {
+      about: {
+        title: "👤 మా గురించి (About Us)",
+        html: `
+          <p><strong>విద్యా నిధి (vidya-nidhi.in)</strong> అనేది తెలంగాణ రాష్ట్ర పాఠశాల విద్యాశాఖ (SCERT) పాఠ్యప్రణాళిక ఆధారంగా 6 నుండి 10వ తరగతి చదువుతున్న విద్యార్థులకు, ఉపాధ్యాయులకు మరియు పోటీ పరీక్షల (TET, DSC, TRT, Gurukula) అభ్యర్థులకు నాణ్యమైన తెలుగు భాషా వనరులను అందించడానికి రూపొందించబడిన విద్యా వేదిక.</p>
+          <h4>రూపకర్త వివరాలు (Creator Details):</h4>
+          <ul>
+            <li><strong>రూపకర్త:</strong> బి. ప్రవీణ్ కుమార్ (M.A., T.P.T.)</li>
+            <li><strong>వృత్తి:</strong> స్కూల్ అసిస్టెంట్ (తెలుగు), సిద్దిపేట జిల్లా, తెలంగాణ.</li>
+            <li><strong>లక్ష్యం:</strong> డిజిటల్ సాంకేతికత సహాయంతో తెలుగు వ్యాకరణం, భాషా ఉచ్చారణ, పాఠ్యపుస్తక విశ్లేషణలు, మాదిరి ప్రశ్నపత్రాలు మరియు ఆన్‌లైన్ క్విజ్‌లను ప్రతి విద్యార్థికి ఉచితంగా చేరువ చేయడం.</li>
+          </ul>
+        `
+      },
+      privacy: {
+        title: "🔒 గోప్యతా విధానం (Privacy Policy)",
+        html: `
+          <p><strong>విద్యా నిధి (vidya-nidhi.in)</strong> వెబ్‌సైట్‌ను సందర్శించే వినియోగదారుల (విద్యార్థులు, ఉపాధ్యాయులు మరియు పాఠకులు) గోప్యత మాకు అత్యంత ముఖ్యమైనది. ఈ గోప్యతా విధానం మేము సేకరించే సమాచారం మరియు దాని వినియోగాన్ని వివరిస్తుంది.</p>
+          <h4>1. వ్యక్తిగత సమాచార సేకరణ (Information Collection)</h4>
+          <p>మా వెబ్‌సైట్‌లోని విద్యా వనరులను, వ్యాకరణ వ్యాసాలను, ఆడియో అభ్యసనాలను వీక్షించడానికి ఎటువంటి వ్యక్తిగత నమోదు (Registration) అవసరం లేదు. మీరు స్వచ్ఛందంగా మమ్మల్ని సంప్రదించినప్పుడు మాత్రమే మీ పేరు లేదా ఈమెయిల్ వివరాలను ఉపయోగిస్తాము.</p>
+          <h4>2. కుకీలు మరియు Google AdSense (Cookies & Google DoubleClick DART Cookie)</h4>
+          <p>మా వెబ్‌సైట్‌లో ప్రకటనలను ప్రదర్శించడానికి మేము థర్డ్-పార్టీ అడ్వర్టైజింగ్ సంస్థ అయిన <strong>Google AdSense (google.com, pub-1307250597168110, DIRECT, f08c47fec0942fa0)</strong> ను ఉపయోగిస్తున్నాము. Google వంటి థర్డ్-పార్టీ వెండర్లు వినియోగదారులు మా సైట్‌ను మరియు ఇంటర్నెట్‌లోని ఇతర సైట్‌లను సందర్శించిన ఆధారంగా ప్రకటనలను అందించడానికి కుకీలను (Cookies - ముఖ్యంగా DART కుకీలను) ఉపయోగిస్తారు.</p>
+          <ul>
+            <li>వినియోగదారులు Google ప్రకటన మరియు కంటెంట్ నెట్‌వర్క్ గోప్యతా విధానాన్ని (https://policies.google.com/technologies/ads) సందర్శించడం ద్వారా DART కుకీ వినియోగాన్ని నిలిపివేయవచ్చు (Opt-out).</li>
+          </ul>
+          <h4>3. లాగ్ ఫైల్స్ & అనలిటిక్స్ (Log Files & Firebase Analytics)</h4>
+          <p>సైట్ పనితీరును మెరుగుపరచడానికి మేము Google Firebase మరియు ప్రామాణిక లాగ్ ఫైల్స్ ఉపయోగిస్తాము. ఇందులో బ్రౌజర్ రకం, తేదీ/సమయం మరియు ఏ పేజీలు ఎక్కువగా చదవబడుతున్నాయనే గణాంకాలు ఉంటాయి. ఇవి ఏ వ్యక్తిగత గుర్తింపుతోనూ అనుసంధానించబడవు.</p>
+          <h4>4. పిల్లల గోప్యత (Children's Privacy)</h4>
+          <p>ఇది పాఠశాల విద్యా సంబంధిత వెబ్‌సైట్ అయినందున, 13 సంవత్సరాల కంటే తక్కువ వయస్సు ఉన్న పిల్లల నుండి మేము ఉద్దేశపూర్వకంగా ఎటువంటి వ్యక్తిగత గుర్తింపు సమాచారాన్ని సేకరించము.</p>
+        `
+      },
+      terms: {
+        title: "📜 వినియోగ నిబంధనలు (Terms and Conditions)",
+        html: `
+          <p><strong>విద్యా నిధి (vidya-nidhi.in)</strong> వెబ్‌సైట్‌ను ఉపయోగించడం ద్వారా మీరు ఈ క్రింది నిబంధనలకు అంగీకరిస్తున్నారు:</p>
+          <h4>1. విద్యా ప్రయోజనాల కోసం మాత్రమే (Educational Use Only)</h4>
+          <p>ఈ వెబ్‌సైట్‌లో అందించబడిన నోట్స్, మోడల్ పేపర్లు, వ్యాకరణ వివరణలు, ఆడియో ఉచ్చారణ సాధనాలు మరియు PDF ఫైళ్లు కేవలం విద్యార్థులు మరియు ఉపాధ్యాయుల విద్యా అవసరాల కోసం మాత్రమే ఉద్దేశించబడ్డాయి.</p>
+          <h4>2. మేధో సంపత్తి హక్కులు (Intellectual Property Rights)</h4>
+          <p>ఈ వెబ్‌సైట్‌లోని సొంత కంటెంట్, డిజైన్ మరియు రూపొందించిన స్టడీ మెటీరియల్స్ రూపకర్త బి. ప్రవీణ్ కుమార్ గారికి చెందినవి. వీటిని వాణిజ్యపరంగా విక్రయించడం లేదా అనుమతి లేకుండా ఇతర వెబ్‌సైట్లలో పునఃప్రచురించడం నిషేధించబడింది. SCERT పాఠ్యపుస్తకాల హక్కులు ప్రభుత్వ విద్యాశాఖకు చెందుతాయి.</p>
+          <h4>3. బాహ్య లింకులు (External Links)</h4>
+          <p>మా వెబ్‌సైట్ నుండి YouTube విద్యా వీడియోలకు లేదా Google Drive ఫైళ్లకు లింకులు ఉండవచ్చు. ఆయా బాహ్య వెబ్‌సైట్ల గోప్యతా విధానాలకు మా సైట్ బాధ్యత వహించదు.</p>
+        `
+      },
+      disclaimer: {
+        title: "⚠️ నిరాకరణ (Disclaimer)",
+        html: `
+          <p><strong>విద్యా నిధి (vidya-nidhi.in)</strong> లో పొందుపరిచిన సమాచారం అంతా సదుద్దేశంతో మరియు సాధారణ విద్యా సమాచారం కోసం మాత్రమే ప్రచురించబడింది.</p>
+          <ul>
+            <li>పాఠ్యాంశాలు, వ్యాకరణ సూత్రాలు మరియు మాదిరి ప్రశ్నపత్రాలను అత్యంత జాగ్రత్తతో రూపొందించినప్పటికీ, సమాచారం యొక్క సంపూర్ణత లేదా ఖచ్చితత్వంపై ఎటువంటి చట్టపరమైన హామీ ఇవ్వబడదు.</li>
+            <li>ఇది ప్రభుత్వ అధికారిక వెబ్‌సైట్ కాదు. తెలంగాణ SCERT సిలబస్ ఆధారంగా విద్యార్థులకు సహాయపడేందుకు ఉపాధ్యాయునిచే నిర్వహించబడుతున్న స్వతంత్ర విద్యా పోర్టల్.</li>
+            <li>అధికారిక పరీక్షల తేదీలు, ప్రభుత్వ ఉత్తర్వుల కోసం సంబంధిత ప్రభుత్వ వెబ్‌సైట్లను (bse.telangana.gov.in / scert.telangana.gov.in) సంప్రదించగలరు.</li>
+          </ul>
+        `
+      },
+      contact: {
+        title: "📞 మమ్మల్ని సంప్రదించండి (Contact Us)",
+        html: `
+          <p>ఈ వెబ్‌సైట్‌లోని పాఠ్యాంశాలు, మెటీరియల్స్ లేదా ఇతర విద్యాపరమైన సందేహాలు, సలహాలు మరియు సూచనల కోసం క్రింది వివరాల ద్వారా మమ్మల్ని సంప్రదించవచ్చు:</p>
+          <ul>
+            <li><strong>రూపకర్త:</strong> బి. ప్రవీణ్ కుమార్ (M.A., T.P.T.)</li>
+            <li><strong>హోదా:</strong> స్కూల్ అసిస్టెంట్ (తెలుగు)</li>
+            <li><strong>ప్రాంతం:</strong> సిద్దిపేట, తెలంగాణ రాష్ట్రం - 502103</li>
+            <li><strong>ఫోన్ నంబర్:</strong> +91 9908331738</li>
+            <li><strong>వెబ్‌సైట్:</strong> https://vidya-nidhi.in</li>
+          </ul>
+        `
+      }
+    };
+
+    function openPolicyModal(type) {
+      const sec = document.getElementById('policy-sec');
+      const titleEl = document.getElementById('policyTitle');
+      const contentEl = document.getElementById('policyContent');
+      const data = policyData[type];
+      if (!data) return;
+      titleEl.innerHTML = data.title;
+      contentEl.innerHTML = data.html;
+      sec.style.display = 'block';
+      sec.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closePolicySection() {
+      document.getElementById('policy-sec').style.display = 'none';
+    }
+
+    function showHomeView() {
+      document.getElementById('policy-sec').style.display = 'none';
+      document.getElementById('selectedFolderSection').style.display = 'none';
+      document.getElementById('bhasha-sec').style.display = 'none';
+      document.getElementById('about-sec').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ప్రధాన నావిగేషన్ ప్రకారం సబ్-నావిగేషన్ మ్యాపింగ్
+    const subNavOptions = {
+      'డిజిటల్ పుస్తకాలు': ['6వ తరగతి', '7వ తరగతి', '8వ తరగతి', '9వ తరగతి', '10వ తరగతి'],
+      'పాఠ్యపుస్తకాలు': ['6వ తరగతి వాచకం', '7వ తరగతి వాచకం', '8వ తరగతి వాచకం', '9వ తరగతి వాచకం', '10వ తరగతి వాచకం'],
+      'మాదిరి ప్రశ్న పత్రాలు': ['FA-1', 'FA-2', 'FA-3', 'FA-4', 'SA-1', 'SA-2', '10వ తరగతి బోర్డు మోడల్ పేపర్లు'],
+      'వ్యాకరణాంశాలు': ['సంధులు', 'సమాసాలు', 'ఛందస్సు', 'అలంకారాలు', 'సాధారణ వ్యాకరణం'],
+      'సాహిత్య అంశాలు': ['తెలంగాణ కవులు', 'గేయాలు & కవితలు', 'సాహిత్య ప్రక్రియలు'],
+      'ప్రాజెక్టులు': ['6-8వ తరగతి ప్రాజెక్టులు', '9-10వ తరగతి ప్రాజెక్ట్ పనులు', 'సృజనాత్మక నమూనాలు'],
+      'పుస్తక సమీక్షలు': ['విద్యా గ్రంథాలు', 'సాహిత్య సంపుటులు', 'బాల సాహిత్యం'],
+      'క్విజ్': ['ఆన్‌లైన్ క్విజ్', 'మల్టిపుల్ ఛాయిస్ బ్యాంక్']
+    };
+
+    function updateSubNav() {
+      const main = document.getElementById('mainNav').value;
+      const sub = document.getElementById('subNav');
+      sub.innerHTML = '';
+      const list = subNavOptions[main] || ['సాధారణ'];
+      list.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item;
+        opt.textContent = item;
+        sub.appendChild(opt);
+      });
+    }
+
+    let materials = [];
+
+    // Realtime Database Sync
+    function loadPortalMaterials() {
+      if (isCloudEnabled && db) {
+        db.ref('materials').on('value', (snapshot) => {
+          const cloudData = snapshot.val();
+          if (cloudData) {
+            materials = Object.values(cloudData);
+          } else {
+            materials = [];
+          }
+          renderAdminFilesList();
+          refreshOpenFolder();
+        }, (error) => {
+          console.warn("DB Sync Error:", error);
+        });
+      }
+    }
+
+    function openSectionFolder(mainNavName, subNavName) {
+      document.getElementById('bhasha-sec').style.display = 'none';
+
+      const folderSection = document.getElementById('selectedFolderSection');
+      const folderHeading = document.getElementById('folderHeading');
+      const folderSubBadge = document.getElementById('folderSubBadge');
+      const grid = document.getElementById('folderMaterialsGrid');
+
+      folderHeading.textContent = `📁 ${mainNavName}`;
+      folderSubBadge.textContent = subNavName;
+
+      const matched = materials.filter(item => 
+        item.mainNav === mainNavName && (!subNavName || item.subNav === subNavName)
+      );
+
+      const isAdmin = auth && auth.currentUser;
+
+      if (!matched.length) {
+        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:35px 20px; color:#64748b;">
+          <p style="font-size:1.1rem; font-weight:700;">📂 ఈ విభాగానికి సంబంధించిన ఫైళ్లు ప్రస్తుతం అందుబాటులో లేవు.</p>
+          <small>అడ్మిన్ లాగిన్ ద్వారా ఈ సబ్-నావిగేషన్‌లో ఫైళ్లను అప్‌లోడ్ చేయవచ్చు.</small>
+        </div>`;
+      } else {
+        grid.innerHTML = matched.map(item => {
+          let typeBadge = '';
+          if (item.fileType === 'pdf') typeBadge = '<span class="tag tag-pdf">PDF</span>';
+          else if (item.fileType === 'ppt') typeBadge = '<span class="tag tag-ppt">PPT</span>';
+          else if (item.fileType === 'excel') typeBadge = '<span class="tag tag-excel">EXCEL</span>';
+          else if (item.fileType === 'doc') typeBadge = '<span class="tag tag-pdf">DOC</span>';
+
+          const openLink = item.fileUrl || item.webUrl || (item.ytUrl || '#');
+
+          return `
+            <div class="material-card">
+              <div>
+                <div class="tags-row">
+                  <span class="tag tag-cat">${item.mainNav}</span>
+                  <span class="tag tag-cat">${item.subNav}</span>
+                  ${typeBadge}
+                  ${item.ytUrl ? '<span class="tag tag-yt">YouTube</span>' : ''}
+                </div>
+                <h4 style="font-size:1.15rem; margin-bottom:6px; color:var(--black); font-weight:700;">${item.title}</h4>
+                <p style="font-size:0.88rem; color:#64748b;">${item.description || 'తెలుగు బోధనా విద్యా వనరు'}</p>
+              </div>
+              <div>
+                <div class="card-actions">
+                  ${openLink && openLink !== '#' ? `<a href="${openLink}" target="_blank" rel="noopener" class="btn-action btn-view">👁 చూడండి</a>` : ''}
+                  ${item.fileUrl ? `<a href="${item.fileUrl}" download="${item.title}" target="_blank" class="btn-action btn-download">⬇ డౌన్‌లోడ్</a>` : ''}
+                  ${item.ytUrl ? `<a href="${item.ytUrl}" target="_blank" rel="noopener" class="btn-action btn-yt">▶️ వీడియో</a>` : ''}
+                </div>
+                ${isAdmin ? `
+                  <button class="btn-card-del" onclick="deletePortalItem('${item.id}', '${item.storagePath || ''}')">
+                    🗑️ శాశ్వతంగా తొలగించండి (Delete)
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      folderSection.style.display = 'block';
+      folderSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function refreshOpenFolder() {
+      const folderSection = document.getElementById('selectedFolderSection');
+      if (folderSection && folderSection.style.display === 'block') {
+        const h = document.getElementById('folderHeading').textContent.replace('📁 ', '').trim();
+        const s = document.getElementById('folderSubBadge').textContent.trim();
+        openSectionFolder(h, s);
+      }
+    }
+
+    function closeFolderView() {
+      document.getElementById('selectedFolderSection').style.display = 'none';
+    }
+
+    // అడ్మిన్ మోడల్ విండో
+    const secretModal = document.getElementById('secretAdminModal');
+
+    function openAdmin() {
+      secretModal.classList.add('active');
+      if (auth && auth.currentUser) {
+        showUploadView(auth.currentUser);
+      } else {
+        showLoginView();
+      }
+    }
+
+    function closeAdmin() {
+      secretModal.classList.remove('active');
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        openAdmin();
+      }
+    });
+    document.getElementById('secretTrigger').addEventListener('dblclick', openAdmin);
+
+    function showLoginView() {
+      document.getElementById('secLoginView').style.display = 'block';
+      document.getElementById('secUploadView').style.display = 'none';
+      document.getElementById('secLoginMsg').textContent = '';
+      refreshOpenFolder();
+    }
+
+    function showUploadView(user) {
+      document.getElementById('secLoginView').style.display = 'none';
+      document.getElementById('secUploadView').style.display = 'block';
+      if (user && user.email) {
+        document.getElementById('adminUserTag').textContent = `లాగిన్: ${user.email}`;
+      }
+      renderAdminFilesList();
+      refreshOpenFolder();
+    }
+
+    if (auth) {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          if (secretModal.classList.contains('active')) {
+            showUploadView(user);
+          }
+        } else {
+          showLoginView();
+        }
+      });
+    }
+
+    document.getElementById('secLoginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('secEmail').value.trim();
+      const pass = document.getElementById('secPass').value.trim();
+      const msg = document.getElementById('secLoginMsg');
+      const btn = document.getElementById('loginSubmitBtn');
+
+      if (!auth) {
+        msg.textContent = 'Firebase Auth ప్రారంభం కాలేదు!';
+        msg.className = 'msg err';
+        return;
+      }
+
+      msg.textContent = 'లాగిన్ అవుతోంది...';
+      msg.className = 'msg';
+      btn.disabled = true;
+
+      try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, pass);
+        msg.textContent = '';
+        btn.disabled = false;
+        showUploadView(userCredential.user);
+      } catch (err) {
+        btn.disabled = false;
+        msg.className = 'msg err';
+        msg.textContent = 'లాగిన్ విఫలమైంది: ఈమెయిల్ లేదా పాస్‌వర్డ్ సరిచూడండి.';
+      }
+    };
+
+    function adminLogout() {
+      if (auth) {
+        auth.signOut().then(() => showLoginView());
+      } else {
+        showLoginView();
+      }
+    }
+
+    // సంపూర్ణ & శాశ్వత క్లౌడ్ అప్‌లోడ్
+    document.getElementById('secUploadForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const title = document.getElementById('itemTitle').value.trim();
+      const mainNav = document.getElementById('mainNav').value;
+      const subNav = document.getElementById('subNav').value;
+      const desc = document.getElementById('itemDesc').value.trim();
+      const yt = document.getElementById('itemYt').value.trim();
+      const url = document.getElementById('itemUrl').value.trim();
+      const fileInput = document.getElementById('itemFile');
+      const file = fileInput.files[0];
+      const msg = document.getElementById('secUploadMsg');
+      const btn = document.getElementById('uploadSubmitBtn');
+      const progressBox = document.getElementById('uploadProgressBox');
+      const progressBar = document.getElementById('uploadProgressBar');
+      const progressPercent = document.getElementById('uploadPercent');
+      const uploadStatusText = document.getElementById('uploadStatusText');
+
+      if (!file && !yt && !url) {
+        msg.textContent = 'దయచేసి ఫైల్, YouTube లింక్ లేదా వెబ్ లింక్‌లలో కనీసం ఒకదానిని అందించండి.';
+        msg.className = 'msg err';
+        return;
+      }
+
+      if (!auth || !auth.currentUser) {
+        msg.textContent = 'లోపం: మీరు అడ్మిన్‌గా లాగిన్ అయి ఉండాలి.';
+        msg.className = 'msg err';
+        return;
+      }
+
+      const MAX_SIZE = 15 * 1024 * 1024; // 15 MB
+      if (file && file.size > MAX_SIZE) {
+        msg.textContent = 'ఫైల్ సైజు 15MB కంటే ఎక్కువగా ఉంది. గూగుల్ డ్రైవ్ లింక్ వాడండి.';
+        msg.className = 'msg err';
+        return;
+      }
+
+      msg.textContent = '';
+      btn.disabled = true;
+      progressBox.style.display = 'block';
+
+      function updateProgress(pct, status) {
+        progressBar.style.width = pct + '%';
+        progressPercent.textContent = pct + '%';
+        if (status) uploadStatusText.textContent = status;
+      }
+
+      updateProgress(15, 'ఫైల్ పరిశీలించబడుతోంది...');
+
+      let fileType = 'url';
+      let fileUrl = url;
+      let storagePath = '';
+      let isStorageDone = false;
+
+      try {
+        if (file) {
+          const ext = file.name.split('.').pop().toLowerCase();
+          if (ext === 'pdf') fileType = 'pdf';
+          else if (['ppt', 'pptx'].includes(ext)) fileType = 'ppt';
+          else if (['xls', 'xlsx'].includes(ext)) fileType = 'excel';
+          else if (['doc', 'docx'].includes(ext)) fileType = 'doc';
+
+          if (storage) {
+            try {
+              storagePath = `uploads/doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${ext}`;
+              const storageRef = storage.ref().child(storagePath);
+              const uploadTask = storageRef.put(file);
+
+              await new Promise((resolve, reject) => {
+                const timer = setTimeout(() => {
+                  uploadTask.cancel();
+                  reject(new Error("CORS or Storage Timeout"));
+                }, 5000);
+
+                uploadTask.on('state_changed',
+                  (snapshot) => {
+                    if (snapshot.totalBytes > 0) {
+                      const p = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 70);
+                      updateProgress(Math.max(25, p), `క్లౌడ్ స్టోరేజ్‌కు అప్‌లోడ్ అవుతోంది... (${p}%)`);
+                    }
+                  },
+                  (err) => {
+                    clearTimeout(timer);
+                    reject(err);
+                  },
+                  async () => {
+                    clearTimeout(timer);
+                    fileUrl = await uploadTask.snapshot.ref.getDownloadURL();
+                    isStorageDone = true;
+                    resolve();
+                  }
+                );
+              });
+            } catch (stErr) {
+              console.warn("Storage upload timed out or blocked by CORS. Using Realtime Cloud DB Fallback.");
+            }
+          }
+
+          if (!isStorageDone) {
+            updateProgress(65, 'ఫైర్‌బేస్ క్లౌడ్ డేటాబేస్‌కు భద్రపరచబడుతోంది...');
+            fileUrl = await new Promise((resolve) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.readAsDataURL(file);
+            });
+            storagePath = '';
+          }
+        }
+
+        updateProgress(90, 'డేటాబేస్‌లో సేవ్ చేయబడుతోంది...');
+
+        const id = Date.now().toString();
+        const newItem = {
+          id,
+          title,
+          mainNav,
+          subNav,
+          description: desc,
+          fileType,
+          fileUrl,
+          storagePath: storagePath || '',
+          originalFileName: file ? file.name : '',
+          ytUrl: yt,
+          webUrl: url,
+          createdAt: Date.now()
+        };
+
+        if (isCloudEnabled && db) {
+          await db.ref('materials/' + id).set(newItem);
+        }
+
+        materials.unshift(newItem);
+        updateProgress(100, 'పూర్తయింది!');
+
+        msg.textContent = `మెటీరియల్ విజయవంతంగా 100% క్లౌడ్‌లో ప్రచురించబడింది!`;
+        msg.className = 'msg ok';
+        btn.disabled = false;
+        e.target.reset();
+
+        renderAdminFilesList();
+
+        setTimeout(() => {
+          progressBox.style.display = 'none';
+          progressBar.style.width = '0%';
+          msg.textContent = '';
+          closeAdmin();
+          openSectionFolder(mainNav, subNav);
+        }, 1200);
+
+      } catch (err) {
+        progressBox.style.display = 'none';
+        btn.disabled = false;
+        msg.textContent = `అప్‌లోడ్ విఫలమైంది (${err.message}).`;
+        msg.className = 'msg err';
+      }
+    };
+
+    // అడ్మిన్ లిస్ట్ రెండరింగ్
+    function renderAdminFilesList() {
+      const listContainer = document.getElementById('adminFilesList');
+      if (!listContainer) return;
+
+      if (!materials || materials.length === 0) {
+        listContainer.innerHTML = `<p style="font-size:0.85rem; color:#64748b; padding:10px; text-align:center;">ప్రస్తుతం క్లౌడ్‌లో ఫైళ్లు ఏవీ లేవు.</p>`;
+        return;
+      }
+
+      listContainer.innerHTML = materials.map(item => `
+        <div class="admin-file-item">
+          <div style="flex:1; margin-right:12px; overflow:hidden;">
+            <div style="font-weight:700; font-size:0.92rem; color:var(--black); text-overflow:ellipsis; white-space:nowrap; overflow:hidden;">
+              ${item.title}
+            </div>
+            <div style="font-size:0.75rem; color:#718096; margin-top:2px;">
+              📁 ${item.mainNav} &bull; 🏷️ ${item.subNav}
+            </div>
+          </div>
+          <button class="del-btn" onclick="deletePortalItem('${item.id}', '${item.storagePath || ''}')">
+            🗑️ శాశ్వతంగా తొలగించు
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // శాశ్వత క్లౌడ్ డిలీట్ ఫంక్షన్
+    window.deletePortalItem = async function(id, storagePath) {
+      if (!auth || !auth.currentUser) {
+        alert("లోపం: ఫైల్‌ను తొలగించడానికి మీరు అడ్మిన్‌గా లాగిన్ అయి ఉండాలి!");
+        openAdmin();
+        return;
+      }
+
+      const ok = confirm("ఖచ్చితంగా ఈ ఫైల్‌ను శాశ్వతంగా తొలగించాలనుకుంటున్నారా?\n(ఈ చర్య ద్వారా క్లౌడ్ డేటాబేస్ మరియు స్టోరేజ్ నుండి పూర్తిగా తొలగించబడుతుంది)");
+      if (!ok) return;
+
+      try {
+        if (storagePath && storage) {
+          try {
+            const fileRef = storage.ref().child(storagePath);
+            await fileRef.delete();
+          } catch (stErr) {
+            console.warn("Storage delete notice:", stErr.message);
+          }
+        }
+
+        if (db && isCloudEnabled) {
+          await db.ref('materials/' + id).remove();
+        }
+
+        materials = materials.filter(item => String(item.id) !== String(id));
+
+        alert("ఫైల్ క్లౌడ్ సర్వర్ నుండి శాశ్వతంగా తొలగించబడింది!");
+
+        renderAdminFilesList();
+        refreshOpenFolder();
+
+      } catch (err) {
+        console.error("Delete failed error:", err);
+        alert("డిలీట్ విఫలమైంది: " + err.message);
+      }
+    };
+
+    loadPortalMaterials();
+  </script>
+</body>
+</html>
